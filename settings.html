@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SiteLimit</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+  <main class="page">
+    <header class="intro">
+      <div class="brand"><img class="brand-logo" src="icons/SiteLimit.svg" alt=""><h1>SiteLimit</h1></div>
+      <p class="lead">Put a limit on the sites that eat your day.</p>
+      <p class="intro-copy">Give any website a session limit and a daily limit. Refresh the page if you really want another session. Hit your daily limit and you're done until tomorrow.</p>
+    </header>
+
+    <section class="limits-section" aria-label="Website limits">
+      <div class="table-wrap">
+        <table class="limits-table">
+          <thead>
+            <tr>
+              <th><span class="th-title">Domain</span><span class="th-help">website to limit</span></th>
+              <th><span class="th-title">Session</span><span class="th-help">per page load</span></th>
+              <th><span class="th-title">Daily</span><span class="th-help">resets at midnight</span></th>
+              <th><span class="th-title">Redirect</span><span class="th-help">optional</span></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rules-body"></tbody>
+          <tbody>
+            <tr class="draft-row" id="draft-row">
+              <td><input id="draft-domain" type="text" placeholder="example.com" autocomplete="off" spellcheck="false"></td>
+              <td>
+                <div class="unit-input">
+                  <input id="draft-session" type="number" min="1" max="999" step="1" inputmode="numeric" placeholder="2" autocomplete="off">
+                  <span>min</span>
+                </div>
+              </td>
+              <td>
+                <div class="unit-input">
+                  <input id="draft-day" type="number" min="1" max="999" step="1" inputmode="numeric" placeholder="20" autocomplete="off">
+                  <span>min</span>
+                </div>
+              </td>
+              <td><input id="draft-redirect" type="text" placeholder="e.g. google.com" autocomplete="off" spellcheck="false"></td>
+              <td class="action-cell"><button id="add-rule" class="button button-primary" type="button">Add</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="wait-section" aria-labelledby="wait-heading">
+      <h2 id="wait-heading">Make it harder to cheat.</h2>
+      <p class="section-copy">Set a delay before you can change your existing limits.<br>Most bad ideas don't survive 5 minutes.</p>
+
+      <div class="wait-control-row">
+        <div class="wait-table-wrap">
+          <table class="wait-table">
+            <thead>
+              <tr>
+                <th><span class="th-title">Settings delay</span><span class="th-help">before settings unlock</span></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="wait-body"></tbody>
+          </table>
+        </div>
+
+        <div class="lock-status-slot" aria-live="polite">
+          <aside id="lock-status" class="lock-status" hidden>
+            <div class="lock-status-row lock-status-top">
+              <span id="lock-status-title" class="lock-status-title"></span>
+            </div>
+            <div class="lock-status-row lock-status-bottom">
+              <span id="lock-status-message" class="lock-status-message"></span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">A few quick answers.</h2>
+      <div class="faq-list">
+        <details>
+          <summary>Does it slow down my computer or internet?</summary>
+          <p>It uses Chrome's built-in extension features and only wakes up when it has something to do. It's designed to be lightweight and it will not noticeably slow down your computer or internet.</p>
+        </details>
+        <details>
+          <summary>Where does my data go?</summary>
+          <p>It checks the sites you open to apply your limits. Your limits and usage stay locally in your browser. No ads, no analytics, nothing is sent anywhere.</p>
+        </details>
+        <details>
+          <summary>Can I use it in Incognito?</summary>
+          <p>Yes.</p>
+          <ol class="faq-steps">
+            <li>Open <code>chrome://extensions</code></li>
+            <li>Click <strong>Details</strong></li>
+            <li>Toggle <strong>Allow in incognito</strong>.</li>
+          </ol>
+        </details>
+        <details>
+          <summary>What happens when I refresh?</summary>
+          <p>Every refresh starts a new session. That stops the doom scroll. Your daily limit keeps counting, so you can't waste the whole day.</p>
+        </details>
+        <details>
+          <summary>What happens when I hit my daily limit?</summary>
+          <p>That site is done for the day. Come back tomorrow.</p>
+        </details>
+        <details>
+          <summary>How do I uninstall it?</summary>
+          <p>Right-click the extension icon and choose <strong>Remove from Chrome</strong>. Your feed will be delighted, but your scrolling might get back to eating your day.</p>
+        </details>
+        <details>
+          <summary>Found a bug or got an idea?</summary>
+          <p>Have a suggestion? Let me know on <a class="github-link" href="https://github.com/coenclaassen/sitelimit/issues" target="_blank" rel="noreferrer">GitHub</a>.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <script src="settings.js"></script>
+</body>
+</html>
