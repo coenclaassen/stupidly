@@ -4,9 +4,10 @@
 
 SiteLimit puts session and daily limits on the sites that eat your day.
 
-No dashboards. No streaks. No productivity circus. Just a tiny Chrome extension that does its job and gets out of the way.
+No dashboards. No streaks. No productivity circus.
+Just a tiny Chrome extension that does its job and gets out of the way.
 
-Know you'll cheat? Lock the settings. Most bad ideas don't survive five minutes.
+Know you'll cheat? Lock the settings. Most bad ideas don't survive 5 minutes.
 
 ## Install
 
@@ -21,9 +22,7 @@ Chrome Web Store — coming soon.
 
 ## Privacy
 
-No ads. Your limits and usage stay locally in your browser.
-
-[Read the privacy policy](PRIVACY.md)
+No ads. Your limits and usage stay locally in your browser. [Read the privacy policy](PRIVACY.md)
 
 ## Feedback
 
