@@ -1,15 +1,29 @@
 # SiteLimit
 
-Put session and daily limits on distracting websites.
+**Your time is too expensive to donate to the feed.**
 
-## Install locally
+SiteLimit puts session and daily limits on the sites that eat your day.
+
+No dashboards. No streaks. No productivity circus. Just a tiny Chrome extension that does its job and gets out of the way.
+
+Know you'll cheat? Lock the settings. Most bad ideas don't survive five minutes.
+
+## Install
+
+Chrome Web Store — coming soon.
+
+### Install locally
 
 1. Open `chrome://extensions`
 2. Turn on **Developer mode**
 3. Click **Load unpacked**
 4. Select this folder
 
-Everything runs locally in Chrome.
+## Privacy
+
+No ads. Your limits and usage stay locally in your browser.
+
+[Read the privacy policy](PRIVACY.md)
 
 ## Feedback
 
@@ -17,4 +31,4 @@ Found a bug or got an idea? [Open an issue](https://github.com/coenclaassen/site
 
 ## License
 
-Free for noncommercial use under the [PolyForm Noncommercial 1.0.0](LICENSE) license. Commercial use is not permitted.
+Free for noncommercial use under the [PolyForm Noncommercial 1.0.0](LICENSE) license.
