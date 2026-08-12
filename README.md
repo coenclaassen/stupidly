@@ -18,7 +18,17 @@ Chrome Web Store — coming soon.
 1. Open `chrome://extensions`
 2. Turn on **Developer mode**
 3. Click **Load unpacked**
-4. Select this folder
+4. Select the `extension/` folder
+
+### Package for the Chrome Web Store
+
+Run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\package-extension.ps1
+```
+
+Then upload the generated zip from `dist/`.
 
 ## Privacy
 

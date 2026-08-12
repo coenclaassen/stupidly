@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SiteLimit — Website Time Limiter",
-  "version": "0.14.0",
+  "version": "1.0.0",
   "description": "Put a limit on the sites that eat your day. Set session and daily limits for distracting websites.",
   "minimum_chrome_version": "102",
   "permissions": [

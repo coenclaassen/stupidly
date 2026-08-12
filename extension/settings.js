@@ -1,5 +1,4 @@
 const SETTINGS_KEY = "settings";
-const SETTINGS_LOCK_KEY = "settingsLock";
 const MAX_LIMIT_MINUTES = 999;
 const MAX_WAIT_MINUTES = 999;
 
@@ -20,23 +19,26 @@ const draftInputs = {
 
 let settings = { changeWaitSeconds: 0, rules: [] };
 let freshRuleIds = new Set();
-let unlockAt = 0;
+let remainingLockMs = 0;
+let lockActiveSince = null;
 let globallyUnlocked = true;
 let lockTimer = null;
 
 init();
 
 async function init() {
-  const stored = await chrome.storage.local.get([SETTINGS_KEY, SETTINGS_LOCK_KEY]);
+  const stored = await chrome.storage.local.get(SETTINGS_KEY);
   settings = sanitizeSettings(stored[SETTINGS_KEY]);
-  unlockAt = await resolveUnlockAt(stored[SETTINGS_LOCK_KEY]);
 
   renderRules();
   renderWaitTable();
+  resetLockCountdown();
   updateLockState();
-  startLockTimerIfNeeded();
 
   addRuleButton.addEventListener("click", addDraftRule);
+  document.addEventListener("visibilitychange", handlePageAttentionChanged);
+  window.addEventListener("focus", handlePageAttentionChanged);
+  window.addEventListener("blur", handlePageAttentionChanged);
 
   for (const input of Object.values(draftInputs)) {
     input.addEventListener("keydown", (event) => {
@@ -45,27 +47,82 @@ async function init() {
   }
 }
 
-async function resolveUnlockAt(storedLock) {
-  if (settings.changeWaitSeconds <= 0) return 0;
-
-  const now = Date.now();
-  const existingUnlockAt = Number(storedLock?.unlockAt) || 0;
-  if (existingUnlockAt > now) return existingUnlockAt;
-
-  const nextUnlockAt = now + settings.changeWaitSeconds * 1000;
-  await chrome.storage.local.set({
-    [SETTINGS_LOCK_KEY]: { unlockAt: nextUnlockAt }
-  });
-  return nextUnlockAt;
-}
-
 function startLockTimerIfNeeded() {
-  if (lockTimer || settings.changeWaitSeconds <= 0 || Date.now() >= unlockAt) return;
+  if (lockTimer || settings.changeWaitSeconds <= 0 || globallyUnlocked || !isPageActivelyViewed()) return;
+  if (lockActiveSince == null) lockActiveSince = Date.now();
   lockTimer = window.setInterval(updateLockState, 1000);
 }
 
+function stopLockTimer() {
+  if (!lockTimer) return;
+  clearInterval(lockTimer);
+  lockTimer = null;
+}
+
+function handlePageAttentionChanged() {
+  if (settings.changeWaitSeconds <= 0) {
+    updateLockState();
+    return;
+  }
+
+  if (isPageActivelyViewed()) {
+    updateLockState();
+    return;
+  }
+
+  if (globallyUnlocked) {
+    resetLockCountdown();
+  } else {
+    pauseLockCountdown();
+  }
+
+  updateLockState();
+}
+
+function resetLockCountdown() {
+  stopLockTimer();
+  lockActiveSince = null;
+  remainingLockMs = Math.max(0, settings.changeWaitSeconds * 1000);
+  globallyUnlocked = remainingLockMs <= 0;
+}
+
+function pauseLockCountdown() {
+  remainingLockMs = getRemainingLockMs();
+  lockActiveSince = null;
+  stopLockTimer();
+}
+
+function getRemainingLockMs() {
+  if (globallyUnlocked || settings.changeWaitSeconds <= 0) return 0;
+  const activeElapsed = lockActiveSince == null ? 0 : Date.now() - lockActiveSince;
+  return Math.max(0, remainingLockMs - activeElapsed);
+}
+
+function isPageActivelyViewed() {
+  return document.visibilityState === "visible" && document.hasFocus();
+}
+
 function updateLockState() {
-  globallyUnlocked = settings.changeWaitSeconds <= 0 || Date.now() >= unlockAt;
+  if (settings.changeWaitSeconds <= 0) {
+    globallyUnlocked = true;
+    remainingLockMs = 0;
+    lockActiveSince = null;
+    stopLockTimer();
+  } else if (!globallyUnlocked) {
+    if (isPageActivelyViewed()) {
+      startLockTimerIfNeeded();
+    } else {
+      pauseLockCountdown();
+    }
+
+    const remaining = getRemainingLockMs();
+    if (remaining <= 0) {
+      globallyUnlocked = true;
+      remainingLockMs = 0;
+      lockActiveSince = null;
+      stopLockTimer();
+    }
+  }
 
   if (globallyUnlocked) {
     waitControlRow.classList.remove("is-locked");
@@ -73,12 +130,9 @@ function updateLockState() {
     lockStatus.classList.remove("is-locked");
     lockStatusTitle.textContent = "";
     lockStatusMessage.textContent = "";
-    if (lockTimer) {
-      clearInterval(lockTimer);
-      lockTimer = null;
-    }
+    stopLockTimer();
   } else {
-    const remaining = Math.max(0, Math.ceil((unlockAt - Date.now()) / 1000));
+    const remaining = Math.ceil(getRemainingLockMs() / 1000);
     waitControlRow.classList.add("is-locked");
     lockStatus.hidden = false;
     lockStatus.classList.add("is-locked");
@@ -121,11 +175,7 @@ function renderRules() {
 
     const deleteCell = document.createElement("td");
     deleteCell.className = "action-cell";
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "button button-delete";
-    deleteButton.textContent = "Delete";
-    deleteButton.addEventListener("click", () => deleteRule(rule.id));
+    const deleteButton = createButton("button button-delete", "Delete", () => deleteRule(rule.id));
     deleteCell.append(deleteButton);
     tr.append(deleteCell);
 
@@ -187,21 +237,16 @@ function renderWaitTable() {
 
   const actionCell = document.createElement("td");
   actionCell.className = "action-cell";
-  const actionButton = document.createElement("button");
-  actionButton.type = "button";
+  let actionButton;
 
   if (isConfigured) {
-    actionButton.className = "button button-delete";
-    actionButton.textContent = "Delete";
-    actionButton.addEventListener("click", removeWaitTime);
+    actionButton = createButton("button button-delete", "Delete", removeWaitTime);
     input.addEventListener("change", () => saveExistingWaitTime(input));
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") input.blur();
     });
   } else {
-    actionButton.className = "button button-primary";
-    actionButton.textContent = "Add";
-    actionButton.addEventListener("click", () => addWaitTime(input));
+    actionButton = createButton("button button-primary", "Add", () => addWaitTime(input));
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") addWaitTime(input);
     });
@@ -238,17 +283,13 @@ async function addWaitTime(input) {
   }
 
   settings.changeWaitSeconds = minutes * 60;
-  unlockAt = Date.now() + settings.changeWaitSeconds * 1000;
   freshRuleIds.clear();
+  resetLockCountdown();
 
-  await chrome.storage.local.set({
-    [SETTINGS_KEY]: settings,
-    [SETTINGS_LOCK_KEY]: { unlockAt }
-  });
+  await persistSettings();
 
   renderWaitTable();
   updateLockState();
-  startLockTimerIfNeeded();
 }
 
 async function saveExistingWaitTime(input) {
@@ -264,16 +305,15 @@ async function saveExistingWaitTime(input) {
   settings.changeWaitSeconds = minutes * 60;
   await persistSettings();
   input.value = String(minutes);
-  // The updated delay applies the next time settings are opened or refreshed.
+  // The updated delay applies the next time the page locks.
 }
 
 async function removeWaitTime() {
   if (!globallyUnlocked) return;
 
   settings.changeWaitSeconds = 0;
-  unlockAt = 0;
+  resetLockCountdown();
   await persistSettings();
-  await chrome.storage.local.remove(SETTINGS_LOCK_KEY);
   renderWaitTable();
   updateLockState();
 }
@@ -312,6 +352,9 @@ async function addDraftRule() {
 async function saveExistingRule(ruleId, fields) {
   if (!globallyUnlocked && !freshRuleIds.has(ruleId)) return;
 
+  const savedRule = settings.rules.find((rule) => rule.id === ruleId);
+  if (!savedRule) return;
+
   const validation = validateCandidate({
     domain: fields.domain.value,
     session: fields.session.value,
@@ -321,6 +364,7 @@ async function saveExistingRule(ruleId, fields) {
 
   if (!validation.ok) {
     shake(validation.invalidElements.map((key) => fields[key]));
+    restoreRuleFields(fields, savedRule);
     return;
   }
 
@@ -329,6 +373,7 @@ async function saveExistingRule(ruleId, fields) {
   );
   if (duplicate) {
     shake([fields.domain]);
+    restoreRuleFields(fields, savedRule);
     return;
   }
 
@@ -342,6 +387,13 @@ async function saveExistingRule(ruleId, fields) {
   fields.session.value = formatMinuteValue(validation.rule.sessionLimitMinutes);
   fields.day.value = formatMinuteValue(validation.rule.dayLimitMinutes);
   fields.redirect.value = validation.rule.redirect;
+}
+
+function restoreRuleFields(fields, rule) {
+  fields.domain.value = rule.domain;
+  fields.session.value = formatMinuteValue(rule.sessionLimitMinutes);
+  fields.day.value = formatMinuteValue(rule.dayLimitMinutes);
+  fields.redirect.value = rule.redirect;
 }
 
 async function deleteRule(ruleId) {
@@ -436,18 +488,18 @@ function isValidHostname(host) {
 }
 
 function parseMinutes(value) {
-  const text = String(value || "").trim();
-  if (!/^\d+$/.test(text)) return NaN;
-  const number = Number(text);
-  if (!Number.isInteger(number) || number < 1 || number > MAX_LIMIT_MINUTES) return NaN;
-  return number;
+  return parsePositiveInteger(value, MAX_LIMIT_MINUTES);
 }
 
 function parseWaitMinutes(value) {
+  return parsePositiveInteger(value, MAX_WAIT_MINUTES);
+}
+
+function parsePositiveInteger(value, max) {
   const text = String(value || "").trim();
   if (!/^\d+$/.test(text)) return NaN;
   const number = Number(text);
-  if (!Number.isInteger(number) || number < 1 || number > MAX_WAIT_MINUTES) return NaN;
+  if (!Number.isInteger(number) || number < 1 || number > max) return NaN;
   return number;
 }
 
@@ -468,6 +520,15 @@ function formatDuration(seconds) {
   const minutes = Math.floor(seconds / 60);
   const remainder = seconds % 60;
   return `${minutes}:${String(remainder).padStart(2, "0")}`;
+}
+
+function createButton(className, text, onClick) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = className;
+  button.textContent = text;
+  button.addEventListener("click", onClick);
+  return button;
 }
 
 function createCellInput(value, type) {
