@@ -1,23 +1,29 @@
-# STUPIDLY
+<p>
+  <img src="extension/icons/scribble.svg" alt="" height="40">
+  <img src="extension/icons/stupidly.svg" alt="STUPIDLY" height="40">
+</p>
 
-**A stupidly simple website blocker.**
+![STUPIDLY campaign](chrome-web-store/image1280x800-01.png)
+![STUPIDLY simple](chrome-web-store/image1280x800-02.png)
+![STUPIDLY settings screen](chrome-web-store/image1280x800-03.png)
 
-Set a session limit. Set a daily limit. When time’s up, the site is blocked.
+## Description
 
-No dashboards. No streaks. No Pomodoro. No account. No ads.
+STUPIDLY is a simple Chrome extension for limiting time on distracting websites.
 
-Know you’ll change the rules the second a site gets blocked?
+I built it because too many website blockers make a simple job way more complicated than it needs to be.
+This extension does one thing: it limits distracting websites.
+Set a session limit. Set a daily limit. When time runs out, the site is blocked.
+Want to make it harder to cheat? Add a delay before you can change your limits.
+Most bad ideas don’t survive 5 minutes.
+No account. No ads. No analytics. Your limits and usage stay locally in Chrome.
+No dashboards. No schedules. No fake productivity.
 
-Add a delay before you can change your limits.
+Just install it, set your limits, and get on with your day.
 
-**Most bad ideas don’t survive 5 minutes.**
+## Get it now
 
-## Install locally
-
-1. Open `chrome://extensions`
-2. Turn on **Developer mode**
-3. Click **Load unpacked**
-4. Select the `extension/` folder
+Chrome Web Store — coming soon.
 
 ## Privacy
 
