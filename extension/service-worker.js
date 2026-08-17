@@ -16,7 +16,7 @@ let stateQueue = Promise.resolve();
 
 function enqueueStateTask(task) {
   stateQueue = stateQueue.then(task).catch((error) => {
-    console.error("SiteLimit:", error);
+    console.error("STUPIDLY:", error);
   });
   return stateQueue;
 }
@@ -587,7 +587,7 @@ async function setDailyBadge(tabId, rule) {
   try {
     await Promise.all([
       chrome.action.setBadgeText({ tabId, text }),
-      chrome.action.setTitle({ tabId, title: `SiteLimit - ${minutes} min daily limit` })
+      chrome.action.setTitle({ tabId, title: `STUPIDLY - ${minutes} min daily limit` })
     ]);
   } catch {
     // Tab may have disappeared.
@@ -598,7 +598,7 @@ async function clearTabBadge(tabId) {
   try {
     await Promise.all([
       chrome.action.setBadgeText({ tabId, text: "" }),
-      chrome.action.setTitle({ tabId, title: "SiteLimit" })
+      chrome.action.setTitle({ tabId, title: "STUPIDLY" })
     ]);
   } catch {
     // Tab may have disappeared.

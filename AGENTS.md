@@ -53,6 +53,16 @@ Before publishing:
 - The extension badge shows the configured daily limit minutes for the active limited domain.
 - User settings and usage stay local in Chrome storage.
 
+## Product Principles
+
+- STUPIDLY is deliberately simple.
+- Its job is to set website time limits and enforce them.
+- Simplicity is the product.
+- Prefer removing complexity over adding features.
+- Do not add dashboards, streaks, Pomodoro timers, AI coaching, analytics, accounts, schedules, or other productivity-system features without an explicit product decision.
+- Users should configure it and then largely forget it exists.
+- Privacy language must accurately describe local website and usage processing.
+
 ## Git
 
 Avoid force-pushing. If `origin/main` has moved, fetch and rebase before pushing.

@@ -4,31 +4,35 @@
 
 ### Title
 
-SiteLimit — Website Time Limiter
+STUPIDLY — Website Blocker
 
 ### Summary
 
-Put a limit on the sites that eat your day. Set session and daily limits for distracting websites.
+A stupidly simple website blocker. Set a time limit. When time’s up, the site stops. That’s it.
 
 ### Overview
 
-Make distracting websites run out of time.
+A stupidly simple website blocker.
 
-SiteLimit does one job: puts a limit on the sites that eat your day. No dashboards. No streaks. No productivity circus. Just a tiny, local extension that does its job and gets out of the way.
+Want dashboards? Not here.
+Want streaks? Not here.
+Want AI-powered guilt reports? Definitely not here.
 
-Know you’ll cheat? Lock the settings. Most bad ideas don’t survive five minutes.
+Want Instagram, YouTube, TikTok or any other website blocked after 5 minutes?
 
-Install it. Set the rules. Go do something better.
+Yes. It does that.
 
-Still not convinced?
+This extension does one job: it limits distracting websites.
 
-Will it slow down my computer or internet?
-It’s built to stay light. It only wakes up when it has something to do.
+Set a session limit. Set a daily limit. When time runs out, the site is blocked.
 
-Where does my data go?
-Nowhere. Your limits and usage stay locally in your browser. No ads. Nothing is sent to a server.
+No account. No ads. Your limits and usage stay locally in your browser.
 
-Install it and focus on what matters.
+Stop fooling around with dashboards, schedules, and fake productivity.
+
+Just install this one and you’re done.
+
+A stupidly simple way to stop a website from eating your day.
 
 ### Category
 
@@ -40,12 +44,11 @@ English
 
 ### Homepage
 
-https://github.com/coenclaassen/sitelimit
+https://github.com/coenclaassen/stupidly
 
 ### Support
 
-https://github.com/coenclaassen/sitelimit/issues
-
+https://github.com/coenclaassen/stupidly/issues
 
 ### Mature content
 
@@ -57,13 +60,11 @@ No
 
 
 
-
 # Privacy practices
 
 ## Single purpose
 
-SiteLimit lets users set and enforce session and daily time limits for websites, with an optional delay before existing limits can be changed.
-
+STUPIDLY lets users set and enforce session and daily time limits for websites, with an optional delay before existing limits can be changed.
 
 ## Permission justifications
 
@@ -77,7 +78,7 @@ Schedules session expirations, daily-limit checks, and the midnight reset withou
 
 ### webNavigation
 
-Detects top-level page loads on configured websites so SiteLimit can start a new session timer and enforce the user's limits.
+Detects top-level page loads on configured websites so STUPIDLY can start a new session timer and enforce the user's limits.
 
 ### declarativeNetRequest
 
@@ -85,8 +86,7 @@ Blocks or redirects configured websites after the user reaches a daily limit usi
 
 ### host permissions
 
-Users can limit any website, so SiteLimit needs access to HTTP and HTTPS URLs to recognize configured domains and enforce the limits the user sets.
-
+Users can limit any website, so STUPIDLY needs access to HTTP and HTTPS URLs to recognize configured domains and enforce the limits the user sets.
 
 ## Remote code
 
@@ -96,8 +96,7 @@ No, I am not using remote code.
 
 If a justification field is shown:
 
-SiteLimit does not execute remote code. All JavaScript and assets are packaged with the extension.
-
+STUPIDLY does not execute remote code. All JavaScript and assets are packaged with the extension.
 
 # Data usage
 
@@ -113,7 +112,6 @@ SiteLimit does not execute remote code. All JavaScript and assets are packaged w
 - [x] User activity
 - [ ] Website content
 
-
 ## Data usage certifications
 
 Check all three:
@@ -122,7 +120,6 @@ Check all three:
 - [x] I do not use or transfer user data for purposes unrelated to my item's single purpose.
 - [x] I do not use or transfer user data to determine creditworthiness or for lending purposes.
 
-
 ### Privacy policy
 
-https://github.com/coenclaassen/sitelimit/blob/main/PRIVACY.md
+https://github.com/coenclaassen/stupidly/blob/main/PRIVACY.md

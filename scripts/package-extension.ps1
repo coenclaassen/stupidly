@@ -12,7 +12,7 @@ if (-not $version) {
 
 $distDir = Join-Path $root "dist"
 $stageDir = Join-Path $distDir "package"
-$zipPath = Join-Path $distDir "sitelimit-$version.zip"
+$zipPath = Join-Path $distDir "stupidly-$version.zip"
 
 $packageItems = @(
   "manifest.json",
@@ -26,7 +26,9 @@ $packageItems = @(
   "icons/icon16.png",
   "icons/icon32.png",
   "icons/icon48.png",
-  "icons/icon128.png"
+  "icons/icon128.png",
+  "icons/scribble.svg",
+  "icons/stupidly.svg"
 )
 
 New-Item -ItemType Directory -Force -Path $distDir | Out-Null
