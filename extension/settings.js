@@ -9,6 +9,7 @@ const waitControlRow = document.querySelector(".wait-control-row");
 const lockStatus = document.getElementById("lock-status");
 const lockStatusTitle = document.getElementById("lock-status-title");
 const lockStatusMessage = document.getElementById("lock-status-message");
+const extensionsPageLink = document.getElementById("extensions-page-link");
 
 const draftInputs = {
   domain: document.getElementById("draft-domain"),
@@ -36,6 +37,10 @@ async function init() {
   updateLockState();
 
   addRuleButton.addEventListener("click", addDraftRule);
+  extensionsPageLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    chrome.tabs.create({ url: "chrome://extensions/" });
+  });
   document.addEventListener("visibilitychange", handlePageAttentionChanged);
   window.addEventListener("focus", handlePageAttentionChanged);
   window.addEventListener("blur", handlePageAttentionChanged);
