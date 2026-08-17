@@ -3,9 +3,17 @@
   <img src="extension/icons/stupidly.svg" alt="STUPIDLY" height="40">
 </p>
 
-![STUPIDLY campaign](chrome-web-store/image1280x800-01.png)
-![STUPIDLY simple](chrome-web-store/image1280x800-02.png)
-![STUPIDLY settings screen](chrome-web-store/image1280x800-03.png)
+<p>
+  <img src="./chrome-web-store/image1280x800-01.png" alt="STUPIDLY campaign" width="100%">
+</p>
+
+<p>
+  <img src="./chrome-web-store/image1280x800-02.png" alt="STUPIDLY simple" width="100%">
+</p>
+
+<p>
+  <img src="./chrome-web-store/image1280x800-03.png" alt="STUPIDLY settings screen" width="100%">
+</p>
 
 ## Description
 
